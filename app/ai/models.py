@@ -1,15 +1,22 @@
+from langchain.chat_models import init_chat_model
 from langchain_core.messages import BaseMessage
-from langchain_openai import ChatOpenAI
+from langgraph.checkpoint.memory import MemorySaver
+from langgraph.prebuilt import create_react_agent
+
+from app.ai.tools import agent_tools
 from app.config import Config
 
-extract_model = ChatOpenAI(
+model = init_chat_model(
     model="gpt-4o-mini",
     temperature=0,
     api_key=Config.OPENAI_API_KEY,
+    model_provider='openai',
 )
 
+agent = create_react_agent(model, agent_tools)
 
-def extract_preferences(messages: list) -> BaseMessage:
+
+def converse(messages: list) -> BaseMessage:
     """
     Extrait les préférences de voyage à partir des messages de l'utilisateur.
 
@@ -20,5 +27,5 @@ def extract_preferences(messages: list) -> BaseMessage:
         dict: Un dictionnaire contenant les préférences extraites.
     """
 
-    response = extract_model.invoke(messages)
+    response = model.invoke(messages)
     return response

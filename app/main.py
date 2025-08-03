@@ -11,7 +11,7 @@ def main():
 
     setup_handlers(app)
 
-    print("Starting bot...")
+    print("Le Telegram bot est en cours d'exécution...")
     # Start the bot
     app.run_polling()
 
