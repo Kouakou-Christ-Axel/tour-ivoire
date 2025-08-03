@@ -35,28 +35,28 @@ budget, centres d’intérêt, durée du séjour, événements en cours, etc.
 ## Lancer le projet en local
 
 1. Cloner le dépôt :
-   ```bash
+```bash
    git clone https://github.com/Kouakou-Christ-Axel/tour-ivoire
     cd tour-ivoire
-    ```
+```
 2. Créer un environnement virtuel et l’activer :
 
 ```bash
    python -m venv venv
    source venv/bin/activate  # Sur Windows : venv\Scripts\activate
-   ```
+```
 
 3. Installer les dépendances :
 
 ```bash
    pip install -r requirements.txt
-   ```
+```
 
 4. Configurer les variables d’environnement :
-   ```bash
+```bash
     cp .env.example .env
     nano .env  # Modifier les variables nécessaires (API keys, DB, etc.)
-    ```
+```
 5. Lancer la base de données PostgreSQL avec Docker :
 
 ```bash
@@ -67,5 +67,5 @@ budget, centres d’intérêt, durée du séjour, événements en cours, etc.
 
 ```bash
    python main.py
-   ```
+```
    
