@@ -36,36 +36,35 @@ budget, centres d’intérêt, durée du séjour, événements en cours, etc.
 
 1. Cloner le dépôt :
 ```bash
-   git clone https://github.com/Kouakou-Christ-Axel/tour-ivoire
-    cd tour-ivoire
+git clone https://github.com/Kouakou-Christ-Axel/tour-ivoire
+cd tour-ivoire
 ```
 2. Créer un environnement virtuel et l’activer :
 
 ```bash
-   python -m venv venv
-   source venv/bin/activate  # Sur Windows : venv\Scripts\activate
+python -m venv venv
+source venv/bin/activate  # Sur Windows : venv\Scripts\activate
 ```
 
 3. Installer les dépendances :
 
 ```bash
-   pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 
 4. Configurer les variables d’environnement :
 ```bash
-    cp .env.example .env
-    nano .env  # Modifier les variables nécessaires (API keys, DB, etc.)
+cp .env.example .env
+nano .env  # Modifier les variables nécessaires (API keys, DB, etc.)
 ```
 5. Lancer la base de données PostgreSQL avec Docker :
 
 ```bash
-   docker-compose up -d
+docker-compose up -d
 ``` 
 
 6. Lancer le bot Telegram :
 
 ```bash
-   python main.py
+python main.py
 ```
-   
