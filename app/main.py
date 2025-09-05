@@ -5,7 +5,7 @@ from config import Config
 
 
 def main():
-    seed_cities()
+    # seed_cities()
     # Create the application instance
     app = ApplicationBuilder().token(Config.TELEGRAM_BOT_TOKEN).build()
 
