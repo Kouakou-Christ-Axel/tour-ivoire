@@ -1,4 +1,5 @@
 from telegram import Update
+from telegram.constants import ParseMode
 from telegram.ext import CommandHandler, ContextTypes, MessageHandler, filters
 
 from app.backend.services.message_service import prepare_agent_messages, process_agent_response, save_messages
@@ -31,9 +32,9 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Enregistrer les messages dans la base de données
     save_messages(chat_id, user_message, ai_message)
-
+    print(ai_message)
     # Répondre à l'utilisateur
-    await update.message.reply_text(ai_message)
+    await update.message.reply_text(ai_message, parse_mode=ParseMode.MARKDOWN)
 
 def setup_handlers(application):
     application.add_handler(CommandHandler('start', start))

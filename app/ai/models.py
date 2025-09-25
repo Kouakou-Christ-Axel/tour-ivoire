@@ -1,9 +1,8 @@
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import BaseMessage
-from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 
-from app.ai.tools import agent_tools
+from app.ai.tools.tools import agent_tools
 from app.config import Config
 
 model = init_chat_model(
