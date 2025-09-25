@@ -57,10 +57,17 @@ pip install -r requirements.txt
 cp .env.example .env
 nano .env  # Modifier les variables nécessaires (API keys, DB, etc.)
 ```
+
 5. Lancer la base de données PostgreSQL avec Docker :
 
 ```bash
 docker-compose up -d
+```
+
+6. Creer la base de données (si nécessaire) :
+
+```bash
+python .\app\backend\database\create_db.py
 ``` 
 
 6. Lancer le bot Telegram :
