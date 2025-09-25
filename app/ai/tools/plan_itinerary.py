@@ -1,52 +1,40 @@
-import requests
-from typing import Dict, List, Any, Optional
-from datetime import datetime, timedelta
+from typing import Dict, Any
+
 from langchain_core.tools import tool
-from app.config import Config
+
 from app.ai.tools.get_pois import get_pois, search_restaurants, search_hotels
+
 
 @tool()
 def plan_itinerary(
     city: str, 
-    days: int = 3, 
-    interests: str = "culture, histoire, gastronomie", 
+    days: int = 3, # Nombre de jours du séjour
+    interests: str = "culture, histoire, gastronomie",  # Intérêts du voyageur
     budget: str = "moyen"
 ) -> Dict[str, Any]:
     """
     Planifie un itinéraire touristique complet pour une ville donnée.
     
     Args:
-        city (str): Nom de la ville à visiter
-        days (int, optional): Nombre de jours du séjour. Par défaut 3.
-        interests (str, optional): Intérêts du voyageur (séparés par virgule). Par défaut "culture, histoire, gastronomie".
-        budget (str, optional): Budget du voyageur ("bas", "moyen", "élevé"). Par défaut "moyen".
-        
-    Returns:
-        Dict[str, Any]: Itinéraire détaillé avec attractions, restaurants et hôtels
+        city (str) : Nom ville à visiter
+        days (int, optional) : Nombre de jours du séjour. Par défaut 3.
+        interests (str, optional) : Intérêts du voyageur (séparés par virgule). Par défaut "culture, histoire, gastronomie".
+        budget (str, optional) : Budget du voyageur ("bas", "moyen", "élevé"). Par défaut "moyen".
     """
     try:
-        # Récupérer les attractions de la ville
+        print("Planification de l'itinéraire...")
+        print(f"Ville: {city}, Jours: {days}, Intérêts: {interests}, Budget: {budget}")
+        # Récupérer les attractions ville
         attractions = get_pois(city)
         if isinstance(attractions, list) and len(attractions) > 0 and "error" in attractions[0]:
             return {"error": attractions[0]["error"]}
         
-        # Récupérer les restaurants de la ville
+        # Récupérer les restaurants ville
         restaurants = search_restaurants(city)
         if isinstance(restaurants, list) and len(restaurants) > 0 and "error" in restaurants[0]:
             return {"error": restaurants[0]["error"]}
-        
-        # Récupérer les hôtels selon le budget
-        max_price = 1000  # Par défaut (budget moyen)
-        min_stars = 3     # Par défaut (budget moyen)
-        
-        if budget.lower() == "bas":
-            max_price = 100
-            min_stars = 1
-        elif budget.lower() == "élevé" or budget.lower() == "eleve":
-            max_price = 5000
-            min_stars = 4
             
-        hotels = search_hotels(city, min_stars=min_stars, max_price=max_price)
+        hotels = search_hotels(city)
         if isinstance(hotels, list) and len(hotels) > 0 and "error" in hotels[0]:
             return {"error": hotels[0]["error"]}
         
@@ -77,20 +65,40 @@ def plan_itinerary(
             breakfast_idx = (day - 1) % len(restaurants)
             lunch_idx = (day + 1) % len(restaurants)
             dinner_idx = (day + 2) % len(restaurants)
+
+            print(restaurants)
             
             daily_plan = {
                 "jour": day,
                 "matin": {
-                    "petit_dejeuner": restaurants[breakfast_idx]["nom"] if len(restaurants) > breakfast_idx else "Non disponible",
-                    "activite": day_attractions[0]["nom"] if len(day_attractions) > 0 else "Non disponible"
+                    "petit_dejeuner": {
+                        "nom": restaurants[breakfast_idx]["nom"] if len(restaurants) > breakfast_idx else "Non disponible",
+                        "adresse": restaurants[breakfast_idx]["adresse"] if len(restaurants) > breakfast_idx else "Non disponible"
+                    },
+                    "activite": {
+                        "nom": day_attractions[0]["nom"] if len(day_attractions) > 0 else "Non disponible",
+                        "adresse": day_attractions[0]["adresse"] if len(day_attractions) > 0 and "adresse" in day_attractions[0] else "Non disponible"
+                    }
                 },
                 "midi": {
-                    "dejeuner": restaurants[lunch_idx]["nom"] if len(restaurants) > lunch_idx else "Non disponible",
-                    "activite": day_attractions[1]["nom"] if len(day_attractions) > 1 else "Non disponible"
+                    "dejeuner": {
+                        "nom": restaurants[lunch_idx]["nom"] if len(restaurants) > lunch_idx else "Non disponible",
+                        "adresse": restaurants[lunch_idx]["adresse"] if len(restaurants) > lunch_idx else "Non disponible"
+                    },
+                    "activite": {
+                        "nom": day_attractions[1]["nom"] if len(day_attractions) > 1 else "Non disponible",
+                        "adresse": day_attractions[1]["adresse"] if len(day_attractions) > 1 and "adresse" in day_attractions[1] else "Non disponible"
+                    }
                 },
                 "soir": {
-                    "diner": restaurants[dinner_idx]["nom"] if len(restaurants) > dinner_idx else "Non disponible",
-                    "activite": day_attractions[2]["nom"] if len(day_attractions) > 2 else "Non disponible"
+                    "diner": {
+                        "nom": restaurants[dinner_idx]["nom"] if len(restaurants) > dinner_idx else "Non disponible",
+                        "adresse": restaurants[dinner_idx]["adresse"] if len(restaurants) > dinner_idx else "Non disponible"
+                    },
+                    "activite": {
+                        "nom": day_attractions[2]["nom"] if len(day_attractions) > 2 else "Non disponible",
+                        "adresse": day_attractions[2]["adresse"] if len(day_attractions) > 2 and "adresse" in day_attractions[2] else "Non disponible"
+                    }
                 }
             }
             
@@ -111,5 +119,5 @@ def plan_itinerary(
         
         return itinerary
     except Exception as e:
-        print(f"Erreur lors de la planification de l'itinéraire pour {city}: {e}")
+        print(f"Erreur lors planification de l'itinéraire pour {city}: {e}")
         return {"error": str(e)}

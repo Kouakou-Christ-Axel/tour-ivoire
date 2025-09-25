@@ -149,14 +149,14 @@ def estimate_travel_budget(
 
 agent_tools = [
     # suggest_cities_rag,
-    weather.run,
-    get_pois,
-    get_poi_details,
-    search_restaurants,
-    get_restaurant_details,
-    search_hotels,
-    get_hotel_details,
+    # weather.run,
+    # get_pois,
+    # get_poi_details,
+    # search_restaurants,
+    # get_restaurant_details,
+    # search_hotels,
+    # get_hotel_details,
     plan_itinerary,
-    get_travel_tips,
-    estimate_travel_budget
+    # get_travel_tips,
+    # estimate_travel_budget
 ]

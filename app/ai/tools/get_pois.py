@@ -1,10 +1,10 @@
-import requests
-from datetime import datetime, timedelta
 from typing import Dict, List, Any, Optional
+
+import requests
 from langchain_core.tools import tool
+
 from app.config import Config
 
-# Constantes pour l'API TripAdvisor via RapidAPI
 HEADERS = {
     "x-rapidapi-key": Config.RAPIDAPI_KEY,
     "x-rapidapi-host": Config.RAPIDAPI_HOST
@@ -87,7 +87,7 @@ def get_poi_details(location_id: str) -> dict:
     Récupère les détails d'une attraction à partir de son location_id.
     
     Args:
-        location_id (str): L'identifiant unique de l'attraction
+        location_id (str) : L'identifiant unique de l'attraction
         
     Returns:
         dict: Les détails de l'attraction
@@ -158,7 +158,8 @@ def search_restaurants(city: str) -> List[Dict[str, Any]]:
         restaurants = []
         
         if data.get("data"):
-            for restaurant in data["data"][:10]:  # Limiter à 10 résultats
+            for restaurant in data["data"][:10]:
+                print("raw restaurant data:", restaurant)
                 restaurants.append({
                     "location_id": restaurant.get("location_id", ""),
                     "nom": restaurant.get("name", ""),
@@ -174,14 +175,13 @@ def search_restaurants(city: str) -> List[Dict[str, Any]]:
 
 
 @tool()
-def search_hotels(city: str, min_stars: int = 0, max_price: int = 1000) -> List[Dict[str, Any]]:
+def search_hotels(city: str, min_stars: int = 0) -> List[Dict[str, Any]]:
     """
     Recherche des hôtels dans une ville donnée avec filtrage par étoiles et prix.
     
     Args:
         city (str): Nom de la ville
         min_stars (int, optional): Nombre minimum d'étoiles (0-5). Par défaut 0.
-        max_price (int, optional): Prix maximum par nuit en euros. Par défaut 1000.
         
     Returns:
         List[Dict[str, Any]]: Liste des hôtels trouvés
@@ -232,10 +232,10 @@ def get_hotel_details(location_id: str) -> Dict[str, Any]:
     Récupère les détails d'un hôtel à partir de son location_id.
     
     Args:
-        location_id (str): Identifiant unique de l'hôtel sur TripAdvisor
+        location_id (str) : Identifiant unique de l'hôtel sur TripAdvisor
         
     Returns:
-        Dict[str, Any]: Détails de l'hôtel incluant les services, photos, avis, etc.
+        Dict[str, Any] : Détails de l'hôtel incluant les services, photos, avis, etc.
     """
     try:
         # D'abord récupérer les infos générales via l'API Content
@@ -283,10 +283,10 @@ def get_restaurant_details(location_id: str) -> Dict[str, Any]:
     Récupère les détails d'un restaurant à partir de son location_id.
     
     Args:
-        location_id (str): Identifiant unique du restaurant sur TripAdvisor
+        location_id (str) : Identifiant unique du restaurant sur TripAdvisor
         
     Returns:
-        Dict[str, Any]: Détails du restaurant incluant le menu, photos, avis, etc.
+        Dict[str, Any] : Détails du restaurant incluant le menu, photos, avis, etc.
     """
     try:
         # Utilisation de l'API Content TripAdvisor pour obtenir les détails
